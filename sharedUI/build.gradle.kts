@@ -9,6 +9,17 @@ plugins {
 
 kotlin {
 
+    listOf(
+        iosArm64(),
+        iosSimulatorArm64(),
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "SharedUI"
+            isStatic = false
+            freeCompilerArgs += listOf("-Xios-deployment-target=16.0")
+        }
+    }
+
     androidLibrary {
         namespace = "ch.yoinc.recall.sharedUI"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
