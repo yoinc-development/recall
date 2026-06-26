@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,18 +42,38 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun App() {
+fun App(
+    recalls: List<Recall>,
+    onAdd: (Recall) -> Unit,
+    onDelete: (String) -> Unit,
+    initialRecallId: String? = null,
+) {
     MaterialTheme {
-        RecallList()
+        RecallList(
+            recalls = recalls,
+            onAdd = onAdd,
+            onDelete = onDelete,
+            initialRecallId = initialRecallId,
+        )
     }
 }
 
 @Composable
-fun RecallList() {
-    var recalls by remember { mutableStateOf(listOf<Recall>()) }
+fun RecallList(
+    recalls: List<Recall>,
+    onAdd: (Recall) -> Unit,
+    onDelete: (String) -> Unit,
+    initialRecallId: String? = null,
+) {
     var showAddDialog by remember { mutableStateOf(false) }
     var pendingDeleteId by remember { mutableStateOf<String?>(null) }
     var selectedRecall by remember { mutableStateOf<Recall?>(null) }
+
+    LaunchedEffect(initialRecallId, recalls) {
+        if (initialRecallId != null && selectedRecall == null) {
+            selectedRecall = recalls.find { it.id == initialRecallId }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -92,7 +113,7 @@ fun RecallList() {
                             isPendingDelete = pendingDeleteId == recall.id,
                             onSwiped = { pendingDeleteId = recall.id },
                             onConfirmDelete = {
-                                recalls = recalls.filter { it.id != recall.id }
+                                onDelete(recall.id)
                                 pendingDeleteId = null
                             },
                             onCancelDelete = { pendingDeleteId = null },
@@ -129,12 +150,14 @@ fun RecallList() {
     if (showAddDialog) {
         AddRecallDialog(
             onConfirm = { text, days, time, description ->
-                recalls = recalls + Recall(
-                    id = kotlin.random.Random.nextLong().toString(),
-                    text = text,
-                    days = days,
-                    time = time,
-                    description = description,
+                onAdd(
+                    Recall(
+                        id = kotlin.random.Random.nextLong().toString(),
+                        text = text,
+                        days = days,
+                        time = time,
+                        description = description,
+                    )
                 )
                 showAddDialog = false
             },

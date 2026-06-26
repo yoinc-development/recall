@@ -13,7 +13,11 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "SharedLogic"
             isStatic = true
-            freeCompilerArgs += listOf("-Xios-deployment-target=16.0")
+            if (iosTarget.name.contains("Simulator")) {
+                linkerOpts("-platform_version", "ios-simulator", "16.0", "16.0")
+            } else {
+                linkerOpts("-platform_version", "ios", "16.0", "16.0")
+            }
         }
     }
 
