@@ -27,12 +27,10 @@ jobs:
 
       - name: Build iOS app
         run: |
-          # TODO: remove OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED once sharedLogic has Kotlin sources
           xcodebuild build \
             -project iosApp/iosApp.xcodeproj \
             -scheme iosApp \
             -destination 'generic/platform=iOS Simulator' \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO \
-            OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED=YES
+            CODE_SIGNING_ALLOWED=NO

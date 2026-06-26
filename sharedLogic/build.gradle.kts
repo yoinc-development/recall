@@ -13,6 +13,7 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "SharedLogic"
             isStatic = true
+            freeCompilerArgs += listOf("-Xios-deployment-target=16.0")
         }
     }
 
