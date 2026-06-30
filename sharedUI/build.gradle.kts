@@ -16,11 +16,6 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "SharedUI"
             isStatic = false
-            if (iosTarget.name.contains("Simulator")) {
-                linkerOpts("-platform_version", "ios-simulator", "16.0", "16.0")
-            } else {
-                linkerOpts("-platform_version", "ios", "16.0", "16.0")
-            }
         }
     }
 
