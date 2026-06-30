@@ -16,7 +16,6 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "SharedUI"
             isStatic = false
-            freeCompilerArgs += listOf("-Xios-deployment-target=16.0")
         }
     }
 
